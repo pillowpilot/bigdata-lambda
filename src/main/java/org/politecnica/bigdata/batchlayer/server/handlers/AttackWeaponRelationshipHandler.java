@@ -20,25 +20,23 @@ import com.backtype.hadoop.pail.Pail.TypedRecordOutputStream;
 public class AttackWeaponRelationshipHandler implements Iface {
 
 	@Override
-	public void setRelationship(long attack_id, long weapon_id) throws TException
-	{
+	public void setRelationship(long attack_id, long weapon_id) throws TException {
 		AttackFactory attackFactory = new AttackFactory();
 		AttackID attack = attackFactory.build(attack_id);
-		
+
 		WeaponFactory weaponFactory = new WeaponFactory();
 		WeaponID weapon = weaponFactory.build(weapon_id);
-		
+
 		WeaponUsedEdge edge = new WeaponUsedEdge(attack, weapon);
-		
+
 		storeEdge(edge);
 	}
-	
-	private void storeEdge(WeaponUsedEdge edge)
-	{
+
+	private void storeEdge(WeaponUsedEdge edge) {
 		DataUnit edgeDataUnit = new DataUnit();
-    	edgeDataUnit.setWeapon_used_edge(edge);
-    	
-    	DataUnitStorer storer = new DataUnitStorer();
-    	storer.store(edgeDataUnit);
+		edgeDataUnit.setWeapon_used_edge(edge);
+
+		DataUnitStorer storer = new DataUnitStorer();
+		storer.store(edgeDataUnit);
 	}
 }

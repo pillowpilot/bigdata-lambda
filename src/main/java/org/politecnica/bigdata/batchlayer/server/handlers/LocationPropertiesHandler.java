@@ -22,7 +22,7 @@ public class LocationPropertiesHandler implements Iface {
 	public void setCity(long id, String cityData) throws TException {
 		LocationPropertyValue city = new LocationPropertyValue();
 		city.setCity(cityData);
-		
+
 		storeProperty(id, city);
 	}
 
@@ -30,7 +30,7 @@ public class LocationPropertiesHandler implements Iface {
 	public void setCountry(long id, String countryData) throws TException {
 		LocationPropertyValue country = new LocationPropertyValue();
 		country.setCountry(countryData);
-		
+
 		storeProperty(id, country);
 	}
 
@@ -38,20 +38,19 @@ public class LocationPropertiesHandler implements Iface {
 	public void setRegion(long id, String regionData) throws TException {
 		LocationPropertyValue region = new LocationPropertyValue();
 		region.setCountry(regionData);
-		
+
 		storeProperty(id, region);
 	}
-	
-	private void storeProperty(long id, LocationPropertyValue propertyValue)
-	{
+
+	private void storeProperty(long id, LocationPropertyValue propertyValue) {
 		LocationFactory locationFactory = new LocationFactory();
 		LocationID location = locationFactory.build(id);
 		LocationProperty property = new LocationProperty(location, propertyValue);
-		
+
 		DataUnit propertyDataUnit = new DataUnit();
-    	propertyDataUnit.setLocation_property(property);
-    	
-    	DataUnitStorer storer = new DataUnitStorer();
-    	storer.store(propertyDataUnit);
+		propertyDataUnit.setLocation_property(property);
+
+		DataUnitStorer storer = new DataUnitStorer();
+		storer.store(propertyDataUnit);
 	}
 }

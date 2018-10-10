@@ -23,21 +23,20 @@ public class AttackLocationRelationshipHandler implements Iface {
 	public void setRelationship(long attack_id, long location_id) throws TException {
 		AttackFactory attackFactory = new AttackFactory();
 		AttackID attack = attackFactory.build(attack_id);
-		
+
 		LocationFactory locationFactory = new LocationFactory();
 		LocationID location = locationFactory.build(location_id);
-		
+
 		AttackAtEdge edge = new AttackAtEdge(attack, location);
-		
+
 		storeEdge(edge);
 	}
-	
-	private void storeEdge(AttackAtEdge edge)
-	{
+
+	private void storeEdge(AttackAtEdge edge) {
 		DataUnit edgeDataUnit = new DataUnit();
-    	edgeDataUnit.setAttack_at_edge(edge);
-    	
-    	DataUnitStorer storer = new DataUnitStorer();
-    	storer.store(edgeDataUnit);
+		edgeDataUnit.setAttack_at_edge(edge);
+
+		DataUnitStorer storer = new DataUnitStorer();
+		storer.store(edgeDataUnit);
 	}
 }

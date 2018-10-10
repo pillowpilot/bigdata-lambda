@@ -22,20 +22,19 @@ public class WeaponPropertiesHandler implements Iface {
 	public void setDescription(long id, String descriptionData) throws TException {
 		WeaponPropertyValue description = new WeaponPropertyValue();
 		description.setDescription(descriptionData);
-		
+
 		storeProperty(id, description);
 	}
-	
-	private void storeProperty(long id, WeaponPropertyValue propertyValue)
-	{
+
+	private void storeProperty(long id, WeaponPropertyValue propertyValue) {
 		WeaponFactory weaponFactory = new WeaponFactory();
 		WeaponID weapon = weaponFactory.build(id);
 		WeaponProperty property = new WeaponProperty(weapon, propertyValue);
-		
+
 		DataUnit propertyDataUnit = new DataUnit();
-    	propertyDataUnit.setWeapon_property(property);
-    	
-    	DataUnitStorer storer = new DataUnitStorer();
-    	storer.store(propertyDataUnit);
+		propertyDataUnit.setWeapon_property(property);
+
+		DataUnitStorer storer = new DataUnitStorer();
+		storer.store(propertyDataUnit);
 	}
 }

@@ -7,49 +7,39 @@ import org.apache.thrift.TSerializer;
 
 import com.backtype.hadoop.pail.PailStructure;
 
-public abstract class ThriftPailStructure<T extends Comparable> implements PailStructure<T>{
+public abstract class ThriftPailStructure<T extends Comparable> implements PailStructure<T> {
 	private transient TSerializer serializer;
 	private transient TDeserializer deserializer;
-	
-	private TSerializer getSerializer()
-	{
-		if(serializer == null)
+
+	private TSerializer getSerializer() {
+		if (serializer == null)
 			serializer = new TSerializer();
 		return serializer;
 	}
-	
-	private TDeserializer getDeserializer()
-	{
-		if(deserializer == null)
+
+	private TDeserializer getDeserializer() {
+		if (deserializer == null)
 			deserializer = new TDeserializer();
 		return deserializer;
 	}
-	
-	public byte[] serialize(T object)
-	{
-		try
-		{
+
+	public byte[] serialize(T object) {
+		try {
 			return getSerializer().serialize((TBase) object);
-		}
-		catch(TException ex)
-		{
+		} catch (TException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
-	
-	public T deserialize(byte[] data)
-	{
+
+	public T deserialize(byte[] data) {
 		T object = createThriftObject();
-		try 
-		{
+		try {
 			getDeserializer().deserialize((TBase) object, data);
 			return object;
-		}
-		catch(TException ex)
-		{
+		} catch (TException ex) {
 			throw new RuntimeException(ex);
-		} 
+		}
 	}
-	
+
 	protected abstract T createThriftObject(); // Method to be implemented by childs
 }

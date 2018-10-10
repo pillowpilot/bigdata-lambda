@@ -13,48 +13,44 @@ import org.politecnica.bigdata.batchlayer.server.handlers.LocationPropertiesHand
 import org.politecnica.bigdata.batchlayer.server.handlers.WeaponPropertiesHandler;
 
 public class Server {
-	public static void main(String[] args)
-	{
-		try
-		{
+	public static void main(String[] args) {
+		try {
 			AttackPropertiesHandler attackPropertiesHandler = new AttackPropertiesHandler();
 			LocationPropertiesHandler locationPropertiesHandler = new LocationPropertiesHandler();
 			WeaponPropertiesHandler weaponPropertiesHandler = new WeaponPropertiesHandler();
 			AttackLocationRelationshipHandler attackLocationRelationshipHandler = new AttackLocationRelationshipHandler();
 			AttackWeaponRelationshipHandler attackWeaponRelationshipHandler = new AttackWeaponRelationshipHandler();
-			
+
 			TMultiplexedProcessor multiplexedProcessor = new TMultiplexedProcessor();
-			
-			AttackProperties.Processor attackPropertiesProcessor =
-					new AttackProperties.Processor(attackPropertiesHandler);
+
+			AttackProperties.Processor attackPropertiesProcessor = new AttackProperties.Processor(
+					attackPropertiesHandler);
 			multiplexedProcessor.registerProcessor("attackProperties", attackPropertiesProcessor);
-			
-			LocationProperties.Processor locationPropertiesProcessor = 
-					new LocationProperties.Processor(locationPropertiesHandler);
+
+			LocationProperties.Processor locationPropertiesProcessor = new LocationProperties.Processor(
+					locationPropertiesHandler);
 			multiplexedProcessor.registerProcessor("locationProperties", locationPropertiesProcessor);
-			
-			WeaponProperties.Processor weaponPropertiesProcessor = 
-					new WeaponProperties.Processor(weaponPropertiesHandler);
+
+			WeaponProperties.Processor weaponPropertiesProcessor = new WeaponProperties.Processor(
+					weaponPropertiesHandler);
 			multiplexedProcessor.registerProcessor("weaponProperties", weaponPropertiesProcessor);
-			
-			AttackLocationRelationship.Processor attackLocationRelationshipProcessor = 
-					new AttackLocationRelationship.Processor(attackLocationRelationshipHandler);
+
+			AttackLocationRelationship.Processor attackLocationRelationshipProcessor = new AttackLocationRelationship.Processor(
+					attackLocationRelationshipHandler);
 			multiplexedProcessor.registerProcessor("attackLocationRelationship", attackLocationRelationshipProcessor);
-			
-			AttackWeaponRelationship.Processor attackWeaponRelationshipProcessor =
-					new AttackWeaponRelationship.Processor(attackWeaponRelationshipHandler);
+
+			AttackWeaponRelationship.Processor attackWeaponRelationshipProcessor = new AttackWeaponRelationship.Processor(
+					attackWeaponRelationshipHandler);
 			multiplexedProcessor.registerProcessor("attackWeaponRelationship", attackWeaponRelationshipProcessor);
-			
+
 			final int port = 9090;
 			TServerTransport serverTransport = new TServerSocket(port);
 			TServer server = new TSimpleServer(new Args(serverTransport).processor(multiplexedProcessor));
-			
+
 			System.out.println("Starting server at port " + port);
 			server.serve();
 			System.out.println("Server stoped");
-		}
-		catch(Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}

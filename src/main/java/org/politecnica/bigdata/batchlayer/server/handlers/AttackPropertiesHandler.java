@@ -21,10 +21,10 @@ import com.backtype.hadoop.pail.Pail.TypedRecordOutputStream;
 public class AttackPropertiesHandler implements Iface {
 
 	@Override
-	public void setNumberOfKills(long id, long nkills) throws TException {		
+	public void setNumberOfKills(long id, long nkills) throws TException {
 		AttackPropertyValue numberOfKills = new AttackPropertyValue();
 		numberOfKills.setNkills(nkills);
-		
+
 		storeProperty(id, numberOfKills);
 	}
 
@@ -34,10 +34,10 @@ public class AttackPropertiesHandler implements Iface {
 		dateData.setDay(day);
 		dateData.setMonth(month);
 		dateData.setYear(year);
-		
+
 		AttackPropertyValue date = new AttackPropertyValue();
 		date.setDate(dateData);
-		
+
 		storeProperty(id, date);
 	}
 
@@ -46,23 +46,22 @@ public class AttackPropertiesHandler implements Iface {
 		Coordinates coordinatesData = new Coordinates(); // Thrift model
 		coordinatesData.setLongitude(longitude);
 		coordinatesData.setLatitude(latitude);
-		
+
 		AttackPropertyValue coordinates = new AttackPropertyValue();
 		coordinates.setCoordinates(coordinatesData);
-		
+
 		storeProperty(id, coordinates);
 	}
-	
-	private void storeProperty(long id, AttackPropertyValue propertyValue)
-	{
+
+	private void storeProperty(long id, AttackPropertyValue propertyValue) {
 		AttackFactory attackFactory = new AttackFactory();
 		AttackID attack = attackFactory.build(id);
 		AttackProperty property = new AttackProperty(attack, propertyValue);
-    	
-    	DataUnit propertyDataUnit = new DataUnit();
-    	propertyDataUnit.setAttack_property(property);
-    	
-    	DataUnitStorer storer = new DataUnitStorer();
-    	storer.store(propertyDataUnit);
+
+		DataUnit propertyDataUnit = new DataUnit();
+		propertyDataUnit.setAttack_property(property);
+
+		DataUnitStorer storer = new DataUnitStorer();
+		storer.store(propertyDataUnit);
 	}
 }

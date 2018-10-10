@@ -10,21 +10,20 @@ import org.politecnica.bigdata.batchlayer.model.Pedigree;
 import com.backtype.hadoop.pail.Pail.TypedRecordOutputStream;
 
 public class DataUnitStorer {
-	public DataUnitStorer()
-	{
-		
+	public DataUnitStorer() {
+
 	}
-	public void store(DataUnit dataUnit)
-	{
+
+	public void store(DataUnit dataUnit) {
 		Pedigree pedigree = new Pedigree();
-    	pedigree.setTimestamp(calculateTimestamp());
-    	
-    	Data data = new Data();
-    	data.setDataUnit(dataUnit);
-    	data.setPedigree(pedigree);
-		
+		pedigree.setTimestamp(calculateTimestamp());
+
+		Data data = new Data();
+		data.setDataUnit(dataUnit);
+		data.setPedigree(pedigree);
+
 		System.out.println("Storing: " + data);
-		
+
 		LocalConnectionManager cm;
 		try {
 			cm = LocalConnectionManager.getInstance();
@@ -35,8 +34,8 @@ public class DataUnitStorer {
 			e.printStackTrace();
 		}
 	}
-	private Long calculateTimestamp()
-	{
+
+	private Long calculateTimestamp() {
 		return System.currentTimeMillis();
 	}
 }
