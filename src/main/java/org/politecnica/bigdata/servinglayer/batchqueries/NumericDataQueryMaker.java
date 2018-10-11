@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Paths;
+
+import org.apache.hadoop.fs.Path;
 import org.apache.thrift.TFieldIdEnum;
 import org.politecnica.bigdata.batchlayer.DataPailStructure;
 import org.politecnica.bigdata.batchlayer.model.AttackProperty;
@@ -32,11 +34,10 @@ public class NumericDataQueryMaker implements Serializable {
 	private final String numericDataFieldName = "?numericData";
 	private final String outputFieldName = "?operatorResult";
 
-	public NumericDataQueryMaker(File rootDirectory, TFieldIdEnum field, CascalogFunction fieldsExtractor)
+	public NumericDataQueryMaker(Path rootDirectory, TFieldIdEnum field, CascalogFunction fieldsExtractor)
 			throws IOException {
 		this.fieldsExtractor = fieldsExtractor;
-		pailFilePath = Paths.get(rootDirectory.getAbsolutePath(), "" + field.getThriftFieldId()).toAbsolutePath()
-				.toString();
+		pailFilePath = rootDirectory + "/" + field.getThriftFieldId();
 
 		opts = new PailTapOptions();
 		opts.spec = new PailSpec((PailStructure) new DataPailStructure());

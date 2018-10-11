@@ -1,7 +1,9 @@
 package org.politecnica.bigdata.batchlayer.server.storing;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
+import org.politecnica.bigdata.batchlayer.HDFSConnectionManager;
 import org.politecnica.bigdata.batchlayer.LocalConnectionManager;
 import org.politecnica.bigdata.batchlayer.model.Data;
 import org.politecnica.bigdata.batchlayer.model.DataUnit;
@@ -24,12 +26,15 @@ public class DataUnitStorer {
 
 		System.out.println("Storing: " + data);
 
-		LocalConnectionManager cm;
+		HDFSConnectionManager cm;
 		try {
-			cm = LocalConnectionManager.getInstance();
+			// cm = LocalConnectionManager.getInstance();
+			cm = HDFSConnectionManager.getInstance();
 			TypedRecordOutputStream out = cm.getOutputStream();
 			out.writeObject(data);
 			out.close();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

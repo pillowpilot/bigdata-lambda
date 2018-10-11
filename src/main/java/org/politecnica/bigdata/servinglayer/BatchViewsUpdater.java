@@ -2,9 +2,18 @@ package org.politecnica.bigdata.servinglayer;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.thrift.TFieldIdEnum;
+import org.politecnica.bigdata.batchlayer.HDFSConnectionManager;
 import org.politecnica.bigdata.batchlayer.model.AttackProperty;
 import org.politecnica.bigdata.batchlayer.model.Data;
 import org.politecnica.bigdata.batchlayer.model.DataUnit;
@@ -17,23 +26,37 @@ import cascading.tuple.Tuple;
 import cascalog.CascalogFunction;
 
 public class BatchViewsUpdater {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, URISyntaxException {
 		DatabaseInitializer initializer = new DatabaseInitializer();
 		initializer.initialize();
 		
 		System.out.println("Connection to HBase completed");
-
-		final String rootDirectory = "/home/federico/bigdata/pail/test1538495084016";
-		List<File> validDirectories = Commons.getDateDirectories(new File(rootDirectory));
 		
-		for(File validDirectory: validDirectories)
+		Configuration configuration = new Configuration();
+		FileSystem filesystem = FileSystem.get(new URI(HDFSConnectionManager.defaultUri), configuration);
+		RemoteIterator<LocatedFileStatus> fileStatusListIterator = 
+				filesystem.listLocatedStatus(new Path("/user/federico/data/"));
+		while(fileStatusListIterator.hasNext())
 		{
-			updateNumberOfKills(validDirectory);
+			LocatedFileStatus fileStatus = fileStatusListIterator.next();
+			if(fileStatus.isDirectory())
+			{
+				Path filepath = fileStatus.getPath();
+				updateNumberOfKills(filepath);
+			}
 		}
+		
+		
+//		List<File> validDirectories = Commons.getDateDirectories(new File(rootDirectory));
+//		
+//		for(File validDirectory: validDirectories)
+//		{
+//			updateNumberOfKills(validDirectory);
+//		}
 	}
 
-	private static void updateNumberOfKills(File partitionedDirectory) throws IOException {
-		System.out.println("Updating NKills at " + partitionedDirectory.getAbsolutePath());
+	private static void updateNumberOfKills(Path partitionedDirectory) throws IOException {
+		System.out.println("Updating NKills at " + partitionedDirectory);
 		
 		TFieldIdEnum fieldEnum = DataUnit._Fields.ATTACK_PROPERTY;
 
@@ -58,11 +81,11 @@ public class BatchViewsUpdater {
 		final double localAvgValue = queryMaker.getAverageValue();
 		final long countValue = (long) (sumValue / localAvgValue);
 		
-//		System.out.println(minValue);
-//		System.out.println(maxValue);
-//		System.out.println(sumValue);
-//		System.out.println(localAvgValue);
-//		System.out.println(countValue);
+		System.out.println(minValue);
+		System.out.println(maxValue);
+		System.out.println(sumValue);
+		System.out.println(localAvgValue);
+		System.out.println(countValue);
 		
 		final String dayDescription = partitionedDirectory.getName();
 		System.out.println(dayDescription);

@@ -12,11 +12,12 @@ import com.backtype.hadoop.pail.Pail;
 import com.backtype.hadoop.pail.Pail.TypedRecordOutputStream;
 
 public class HDFSConnectionManager {
+	public static final String defaultUri = "hdfs://localhost:9000/";
 	static HDFSConnectionManager instance = null;
 	FileSystem filesystem;
 	Pail<Data> pail;
 
-	static HDFSConnectionManager getInstance() throws IOException, URISyntaxException {
+	static public HDFSConnectionManager getInstance() throws IOException, URISyntaxException {
 		if (instance == null)
 			instance = new HDFSConnectionManager();
 		return instance;
@@ -29,7 +30,7 @@ public class HDFSConnectionManager {
 	}
 
 	public HDFSConnectionManager() throws IOException, URISyntaxException {
-		this("hdfs://localhost:9000/", "data/");
+		this(defaultUri, "data/");
 	}
 
 	public TypedRecordOutputStream getOutputStream() throws IOException {
